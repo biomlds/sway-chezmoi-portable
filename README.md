@@ -2,7 +2,15 @@
 
 This repository contains a real chezmoi source state for a cohesive Sway desktop on Debian, Ubuntu, and Fedora. Repository infrastructure stays at the top level; `.chezmoiroot` points chezmoi at `dotfiles/`, so unrelated repository files are never treated as home-directory content.
 
-The default look is a restrained dark-slate palette with teal focus, amber secondary, and coral urgent colors. The same palette drives Sway, Waybar, Wofi, Mako, Foot, swaylock, GTK, Qt configuration, and the included locally generated wallpaper. It uses standard-repository, Wayland-native components and no third-party repositories, download scripts, copied theme bundles, secrets, or hardware identifiers.
+The default look is inspired by [timkicker/dotfiles](https://github.com/timkicker/dotfiles): dark-gray surfaces, orange `#df970d` focus accents, a compact 28px Waybar with workspace underlines and subtle separators, and coordinated launcher, notification, terminal and lock styling. Shared chezmoi data drives Sway, Waybar, Wofi, Mako, Foot and swaylock. GTK/Qt retain the distribution's Adwaita/Papirus styling. It uses standard-repository, Wayland-native components and no third-party repositories, download scripts, copied theme bundles, secrets, or hardware identifiers.
+
+See [theme design](docs/theme.md) for the visual choices and customization. The
+portable source also supplies matching tmux, Neovim, Yazi and Git color configs;
+review existing editor/file-manager configs in `chezmoi diff` before applying.
+The default background is solid dark gray; the bundled wallpaper is an optional
+host override. The reference's README describes orange accents, while its current
+Waybar CSS uses green focus in places; this adaptation deliberately uses orange
+consistently.
 
 ## Layout
 
@@ -67,7 +75,8 @@ Install `git` and `chezmoi` from the distribution's standard repository first. O
 From a local clone:
 
 ```sh
-cd /path/to/this/repository
+git clone https://github.com/biomlds/sway-chezmoi-portable.git
+cd sway-chezmoi-portable
 
 # Inspect the exact resolved package set without changing the system.
 ./packages/install.sh --dry-run --tier recommended

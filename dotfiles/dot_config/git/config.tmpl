@@ -1,0 +1,17 @@
+# Color-only configuration: keep identity/remotes/signing in the user's ~/.gitconfig.
+[color]
+    ui = auto
+[color "branch"]
+    current = "{{ .desktop.theme.accent }} bold"
+    local = "{{ .desktop.theme.foreground }}"
+    remote = "{{ .desktop.theme.accentAlt }}"
+[color "diff"]
+    meta = "{{ .desktop.theme.muted }}"
+    frag = "{{ .desktop.theme.blue }}"
+    old = "{{ .desktop.theme.urgent }}"
+    new = "{{ .desktop.theme.accentAlt }}"
+    commit = "{{ .desktop.theme.accent }} bold"
+[color "status"]
+    added = "{{ .desktop.theme.accentAlt }}"
+    changed = "{{ .desktop.theme.accent }}"
+    untracked = "{{ .desktop.theme.urgent }}"

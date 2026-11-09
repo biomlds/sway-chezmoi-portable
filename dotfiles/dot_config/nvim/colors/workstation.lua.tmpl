@@ -1,0 +1,48 @@
+-- Generated from the desktop palette. Compatible with distro Neovim; no plugins.
+vim.cmd("highlight clear")
+vim.o.background = "dark"
+vim.g.colors_name = "workstation"
+local p = {
+    bg = "{{ .desktop.theme.background }}", alt = "{{ .desktop.theme.backgroundAlt }}",
+    surface = "{{ .desktop.theme.surface }}", fg = "{{ .desktop.theme.foreground }}",
+    muted = "{{ .desktop.theme.muted }}", orange = "{{ .desktop.theme.accent }}",
+    green = "{{ .desktop.theme.accentAlt }}", red = "{{ .desktop.theme.urgent }}",
+    blue = "{{ .desktop.theme.blue }}", pink = "{{ .desktop.theme.pink }}", cyan = "{{ .desktop.theme.cyan }}",
+}
+local function hi(group, attributes) vim.api.nvim_set_hl(0, group, attributes) end
+local groups = {
+    Normal = {fg=p.fg, bg=p.bg}, NormalFloat = {fg=p.fg, bg=p.alt},
+    FloatBorder = {fg=p.orange, bg=p.alt}, WinSeparator = {fg=p.surface},
+    LineNr = {fg=p.muted}, CursorLineNr = {fg=p.orange, bold=true},
+    CursorLine = {bg=p.alt}, SignColumn = {bg=p.bg}, ColorColumn = {bg=p.alt},
+    Comment = {fg=p.muted, italic=true}, String = {fg=p.green}, Character = {fg=p.green},
+    Constant = {fg=p.pink}, Number = {fg=p.pink}, Boolean = {fg=p.pink},
+    Identifier = {fg=p.fg}, Function = {fg=p.blue}, Statement = {fg=p.orange},
+    PreProc = {fg=p.cyan}, Type = {fg=p.orange}, Special = {fg=p.cyan},
+    Delimiter = {fg=p.muted}, Title = {fg=p.orange, bold=true},
+    Visual = {bg=p.surface}, Search = {fg=p.bg, bg=p.orange},
+    IncSearch = {fg=p.bg, bg=p.green}, MatchParen = {fg=p.orange, bold=true},
+    Pmenu = {fg=p.fg, bg=p.alt}, PmenuSel = {fg=p.bg, bg=p.orange},
+    PmenuSbar = {bg=p.surface}, PmenuThumb = {bg=p.muted},
+    StatusLine = {fg=p.fg, bg=p.alt}, StatusLineNC = {fg=p.muted, bg=p.bg},
+    TabLine = {fg=p.muted, bg=p.alt}, TabLineSel = {fg=p.orange, bg=p.alt, bold=true},
+    TabLineFill = {bg=p.bg}, Directory = {fg=p.blue}, NonText = {fg=p.surface},
+    ErrorMsg = {fg=p.red, bold=true}, WarningMsg = {fg=p.orange},
+    DiagnosticError = {fg=p.red}, DiagnosticWarn = {fg=p.orange},
+    DiagnosticInfo = {fg=p.blue}, DiagnosticHint = {fg=p.cyan},
+    DiffAdd = {fg=p.green, bg=p.alt}, DiffDelete = {fg=p.red, bg=p.alt},
+    DiffChange = {fg=p.blue, bg=p.alt}, DiffText = {fg=p.orange, bg=p.surface},
+}
+for group, attributes in pairs(groups) do hi(group, attributes) end
+-- Tim-inspired mode accent: normal orange, insert green, visual pink.
+local function mode_color()
+    local mode = vim.api.nvim_get_mode().mode
+    local color = p.orange
+    if mode:match("^[iR]") then color = p.green
+    elseif mode:match("^[vVsS]") or mode == "\22" or mode == "\19" then color = p.pink end
+    hi("WorkstationMode", {fg=p.bg, bg=color, bold=true})
+end
+local group = vim.api.nvim_create_augroup("WorkstationTheme", {clear=true})
+vim.api.nvim_create_autocmd("ModeChanged", {group=group, callback=mode_color})
+mode_color()
+vim.opt.statusline = "%#WorkstationMode# %{mode()} %* %f %m%r%=%y %l:%c %p%% "

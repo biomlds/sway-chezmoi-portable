@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+exec swaylock -f \
+  --color {{ trimPrefix "#" .desktop.theme.background }} \
+  --inside-color {{ trimPrefix "#" .desktop.theme.backgroundAlt }}ff \
+  --ring-color {{ trimPrefix "#" .desktop.theme.accent }}ff \
+  --line-color 00000000 --separator-color 00000000 \
+  --text-color {{ trimPrefix "#" .desktop.theme.foreground }}ff \
+  --key-hl-color {{ trimPrefix "#" .desktop.theme.accentAlt }}ff \
+  --bs-hl-color {{ trimPrefix "#" .desktop.theme.urgent }}ff

@@ -33,3 +33,5 @@ bluetooth	optional	blueman	blueman	blueman	Bluetooth tray applet
 qt5-style	optional	qt5ct	-	qt5ct	Ubuntu 24.04 lacks qt5ct in standard repositories
 qt6-style	optional	qt6ct	-	qt6ct	Ubuntu 24.04 lacks qt6ct in standard repositories
 desktop-notify	optional	libnotify-bin	libnotify-bin	libnotify	Screenshot completion notifications
+terminal-multiplexer	optional	tmux	tmux	tmux	Shared workstation terminal theme
+terminal-editor	optional	neovim	neovim	neovim	Self-contained Lua editor theme

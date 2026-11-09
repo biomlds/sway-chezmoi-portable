@@ -7,11 +7,16 @@ mkdir -p "$runtime"
 exec 9>"$runtime/session.lock"
 flock -n 9 || exit 0
 children=
+monitor=
 cleanup() {
     trap - EXIT HUP INT TERM
+    if [ -n "$monitor" ]; then kill "$monitor" 2>/dev/null || true; fi
     for child in $children; do kill "$child" 2>/dev/null || true; done
     wait 2>/dev/null || true
     rm -f "$runtime/"*.pid "$runtime/session"
+    # Runtime directories can survive logout while the user manager lingers.
+    # Do not retain this desktop's clipboard payloads for the next login.
+    rm -rf "$runtime/clipboard"
 }
 trap cleanup EXIT
 trap 'exit 0' HUP INT TERM
@@ -25,9 +30,22 @@ start_component() {
     command -v "$1" >/dev/null 2>&1 || return 0
     pidfile=$runtime/$name.pid
     # Children must not inherit the supervisor's singleton lock.
-    "$@" 9>&- >"$runtime/$name.log" 2>&1 &
+    (
+        # Keep a child supervisor to reap the real daemon and report failures.
+        # The parent's PID remains owned until cleanup waits for it.
+        "$@" &
+        daemon=$!
+        printf '%s\n' "$daemon" > "$pidfile"
+        trap 'kill "$daemon" 2>/dev/null || true; wait "$daemon" 2>/dev/null || true; exit 0' HUP INT TERM
+        if wait "$daemon"; then
+            printf '%s exited; log out/in to restart it.\n' "$name" >&2
+        else
+            status=$?
+            printf '%s failed (status %s); log out/in to restart it.\n' "$name" "$status" >&2
+        fi
+        rm -f "$pidfile"
+    ) 9>&- >"$runtime/$name.log" 2>&1 &
     children="$children $!"
-    printf '%s\n' "$!" > "$pidfile"
 }
 
 if command -v systemctl >/dev/null 2>&1; then
@@ -47,4 +65,6 @@ start_component network nm-applet --indicator
 if command -v blueman-applet >/dev/null 2>&1; then start_component bluetooth blueman-applet; fi
 # Stay alive until this compositor exits, then reap the daemons we launched.
 # An IPC disconnect also returns, so a crashed compositor is handled.
-swaymsg -m -t subscribe '["shutdown"]' 9>&- >/dev/null 2>&1 || true
+swaymsg -m -t subscribe '["shutdown"]' 9>&- >/dev/null 2>&1 &
+monitor=$!
+wait "$monitor" || true

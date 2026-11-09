@@ -13,14 +13,17 @@ desktop:
     lockSeconds: 300
     displaySeconds: 600
   theme:
-    background: "#111318"
-    backgroundAlt: "#1a1d24"
-    surface: "#242832"
-    foreground: "#e6e9ef"
-    muted: "#9298a6"
-    accent: "#79c7c5"
-    accentAlt: "#e6a76f"
-    urgent: "#e06c75"
+    background: "#222222"
+    backgroundAlt: "#2a2a2a"
+    surface: "#333333"
+    foreground: "#bec1bf"
+    muted: "#969996"
+    accent: "#df970d"
+    accentAlt: "#6aaa64"
+    urgent: "#c65d5d"
+    blue: "#7197b0"
+    pink: "#b16286"
+    cyan: "#7faaa2"
 packages:
   install: false
   tier: recommended

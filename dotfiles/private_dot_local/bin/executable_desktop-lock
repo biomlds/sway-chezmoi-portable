@@ -1,6 +1,0 @@
-#!/bin/sh
-set -eu
-wallpaper=$HOME/.local/share/backgrounds/sway-aurora.png
-set -- swaylock -f --color 111318 --inside-color 1a1d24ee --ring-color 79c7c5ff --line-color 00000000 --separator-color 00000000 --text-color e6e9efff --key-hl-color e6a76fff --bs-hl-color e06c75ff
-[ -r "$wallpaper" ] && set -- "$@" --image "$wallpaper" --scaling fill
-exec "$@"

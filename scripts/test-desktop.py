@@ -13,6 +13,14 @@ BIN = ROOT / "dotfiles/private_dot_local/bin"
 
 
 class DesktopTests(unittest.TestCase):
+    def test_directory_hook_does_not_create_persistent_clipboard_state(self):
+        with tempfile.TemporaryDirectory() as directory:
+            home = Path(directory)
+            subprocess.run(["sh", str(ROOT / "dotfiles/run_once_before_10-create-directories.sh.tmpl")],
+                           env={**os.environ, "HOME": directory, "XDG_STATE_HOME": str(home / "state")}, check=True)
+            self.assertFalse((home / "state").exists())
+            self.assertTrue((home / "Pictures/Screenshots").is_dir())
+
     def test_supervisor_singleton_and_logout_cleanup(self):
         with tempfile.TemporaryDirectory() as directory:
             base = Path(directory)
@@ -25,6 +33,7 @@ class DesktopTests(unittest.TestCase):
                 helper.chmod(0o700)
             for name, body in (
                 ("mako", 'printf "started\\n" >> "$HOME/starts"; exec sleep 30'),
+                ("waybar", 'exit 17'),
                 ("swaymsg", 'while [ ! -e "$HOME/disconnect" ]; do sleep 0.02; done'),
                 ("systemctl", "exit 0"), ("dbus-update-activation-environment", "exit 0"),
             ):
@@ -42,9 +51,24 @@ class DesktopTests(unittest.TestCase):
                 self.assertTrue((base / "starts").exists())
                 subprocess.run(["sh", str(BIN / "executable_desktop-session-start")], env=env, check=True, timeout=3)
                 self.assertEqual((base / "starts").read_text().splitlines(), ["started"])
+                runtime = base / "sway-desktop"
+                for _ in range(100):
+                    log = runtime / "waybar.log"
+                    if log.exists() and "status 17" in log.read_text():
+                        break
+                    time.sleep(0.02)
+                self.assertIn("status 17", log.read_text())
+                # A failed bar must not take down idle/lock supervision.
+                self.assertIsNone(supervisor.poll())
+                mako_pid = int((runtime / "notifications.pid").read_text())
+                (runtime / "clipboard/items").mkdir(parents=True)
+                (runtime / "clipboard/items/example").write_text("session text")
                 (base / "disconnect").touch()
                 supervisor.wait(timeout=3)
                 self.assertEqual(list((base / "sway-desktop").glob("*.pid")), [])
+                self.assertFalse((runtime / "clipboard").exists())
+                with self.assertRaises(ProcessLookupError):
+                    os.kill(mako_pid, 0)
             finally:
                 if supervisor.poll() is None:
                     supervisor.terminate()

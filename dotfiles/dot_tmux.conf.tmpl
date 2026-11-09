@@ -1,0 +1,20 @@
+# Shared workstation palette; native tmux only, no plugin bootstrap.
+set -g mouse on
+set -g history-limit 100000
+set -g default-terminal 'tmux-256color'
+set -as terminal-features ',foot*:RGB,xterm-256color:RGB'
+set -g status-style 'bg={{ .desktop.theme.background }},fg={{ .desktop.theme.foreground }}'
+set -g status-left '#[fg={{ .desktop.theme.background }},bg={{ .desktop.theme.accent }},bold] #S #[default] '
+set -g status-right '#[fg={{ .desktop.theme.muted }}]%a %d %b #[fg={{ .desktop.theme.accent }}]%H:%M '
+set -g window-status-format ' #I:#W '
+set -g window-status-current-format '#[fg={{ .desktop.theme.accent }},bg={{ .desktop.theme.backgroundAlt }},bold] #I:#W #[default]'
+set -g window-status-activity-style 'fg={{ .desktop.theme.accentAlt }}'
+set -g window-status-bell-style 'fg={{ .desktop.theme.urgent }},bold'
+set -g pane-border-style 'fg={{ .desktop.theme.surface }}'
+set -g pane-active-border-style 'fg={{ .desktop.theme.accent }}'
+set -g message-style 'fg={{ .desktop.theme.foreground }},bg={{ .desktop.theme.backgroundAlt }}'
+set -g message-command-style 'fg={{ .desktop.theme.accent }},bg={{ .desktop.theme.backgroundAlt }}'
+set -g mode-style 'fg={{ .desktop.theme.background }},bg={{ .desktop.theme.accent }}'
+set -g display-panes-colour '{{ .desktop.theme.muted }}'
+set -g display-panes-active-colour '{{ .desktop.theme.accent }}'
+bind r source-file ~/.tmux.conf \; display-message 'tmux config reloaded'

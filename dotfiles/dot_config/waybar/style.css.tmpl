@@ -1,20 +1,24 @@
 * {
   border: none;
   border-radius: 0;
-  font-family: "{{ .desktop.fontSans }}";
-  font-size: 13px;
+  font-family: "{{ .desktop.fontMono }}", monospace;
+  font-size: 12px;
   min-height: 0;
 }
-window#waybar { background: alpha({{ .desktop.theme.background }}, 0.94); color: {{ .desktop.theme.foreground }}; }
+window#waybar { background: {{ .desktop.theme.background }}; color: {{ .desktop.theme.foreground }}; border-bottom: 1px solid {{ .desktop.theme.backgroundAlt }}; }
+button { background: transparent; box-shadow: none; }
 #workspaces button { padding: 0 9px; color: {{ .desktop.theme.muted }}; border-bottom: 2px solid transparent; }
 #workspaces button.focused { color: {{ .desktop.theme.foreground }}; border-bottom-color: {{ .desktop.theme.accent }}; background: {{ .desktop.theme.surface }}; }
 #workspaces button.urgent { color: {{ .desktop.theme.background }}; background: {{ .desktop.theme.urgent }}; }
 #mode { color: {{ .desktop.theme.background }}; background: {{ .desktop.theme.accentAlt }}; padding: 0 10px; }
-#window { padding: 0 12px; color: {{ .desktop.theme.foreground }}; }
-#idle_inhibitor, #pulseaudio, #network, #cpu, #memory, #backlight, #battery, #clock, #tray, #custom-power { padding: 0 8px; background: {{ .desktop.theme.backgroundAlt }}; }
-#clock { color: {{ .desktop.theme.accent }}; }
-#battery.warning, #network.disconnected { color: {{ .desktop.theme.accentAlt }}; }
+#window { padding: 0 8px; color: {{ .desktop.theme.foreground }}; }
+#idle_inhibitor, #pulseaudio, #network, #cpu, #memory, #backlight, #battery, #clock, #tray, #custom-power { padding: 0 6px; }
+#backlight, #clock, #tray, #custom-power { border-left: 1px solid {{ .desktop.theme.surface }}; margin-left: 3px; padding-left: 8px; }
+#cpu, #memory, #battery, #pulseaudio { min-width: 40px; }
+#clock { color: {{ .desktop.theme.foreground }}; }
+#battery.warning { color: {{ .desktop.theme.accent }}; }
+#network.disconnected, #pulseaudio.muted { color: {{ .desktop.theme.urgent }}; }
 #battery.critical { color: {{ .desktop.theme.urgent }}; }
-#custom-power { color: {{ .desktop.theme.urgent }}; padding-right: 12px; }
+#custom-power { color: {{ .desktop.theme.accent }}; padding-right: 8px; }
 #tray { padding-left: 10px; }
 tooltip { background: {{ .desktop.theme.surface }}; color: {{ .desktop.theme.foreground }}; border: 1px solid {{ .desktop.theme.accent }}; }

@@ -18,7 +18,7 @@ for f in packages/install.sh dotfiles/private_dot_local/bin/executable_*; do
 done
 ok 'plain shell scripts parse and are executable'
 
-for f in dotfiles/private_dot_local/bin/executable_desktop-idle.tmpl dotfiles/private_dot_local/bin/executable_desktop-open-browser.tmpl dotfiles/run_*.tmpl; do
+for f in dotfiles/private_dot_local/bin/*.tmpl dotfiles/run_*.tmpl; do
     tmp=$(mktemp)
     sed '/^[[:space:]]*{{.*}}[[:space:]]*$/d; s/{{[^}]*}}/value/g' "$f" > "$tmp"
     sh -n "$tmp" || bad "templated shell syntax: $f"

@@ -22,7 +22,8 @@ provide the workstation's agent lifecycle.
 ## First application
 
 Do this in the normal installed system; root changes in recovery are ephemeral.
-Use a reviewed local clone or a repository URL you control. The installer never
+Use the published [biomlds/sway-chezmoi-portable](https://github.com/biomlds/sway-chezmoi-portable)
+repository, reviewing its revision before applying. The installer never
 clones or executes the KDBX Chezmoi.Repository automatically.
 
 1. Back up current user desktop configuration and review existing unmanaged
@@ -32,7 +33,8 @@ clones or executes the KDBX Chezmoi.Repository automatically.
    components; the manifest remains the portable package source of truth:
 
    ```sh
-   cd /path/to/sway-chezmoi-portable
+   git clone https://github.com/biomlds/sway-chezmoi-portable.git
+   cd sway-chezmoi-portable
    ./packages/install.sh --dry-run --tier recommended
    # Only if packages are missing; APT work remains an explicit system operation:
    ./packages/install.sh --tier recommended
@@ -67,7 +69,9 @@ clones or executes the KDBX Chezmoi.Repository automatically.
   runtime-only, skips compositor-marked sensitive selections, and retains at most
   200 text entries of 1 MiB. Applications may fail to mark secrets: disabling
   history is the stronger boundary. Remove any old persistent history under
-  `~/.local/state/sway-desktop/clipboard` manually after reviewing it.
+   `~/.local/state/sway-desktop/clipboard` manually after reviewing it.
+  The directory-creation hook no longer creates persistent clipboard state;
+  runtime history is cleared on supervised session exit, including lingered logins.
 - Use `~/.config/sway/hosts/<hostname>.conf` for actual monitors and input devices.
   All host files are included, so retain only files intended for this machine.
 - No browser association is forced. Set your preferred XDG browser after Flatpak

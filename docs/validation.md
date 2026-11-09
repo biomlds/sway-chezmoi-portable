@@ -9,6 +9,18 @@
 - Behavioral regressions cover expanded duplicate keybindings, sensitive/oversize
   clipboard exclusion, payload eviction and private index modes, and suspend
   refusal after lock failure.
+- Cleanup regressions verify no persistent clipboard directory is created,
+  runtime clipboard data is removed on logout, daemon children are reaped, and a
+  failed Waybar is logged without terminating idle supervision. Five tests pass.
+- The Tim-inspired orange/gray theme was rendered/applied twice with real chezmoi
+  in a disposable HOME. Rendered shell syntax and matching Sway background,
+  Waybar accent, terminal ANSI accent and lock-ring color were checked. No visual
+  screenshot comparison or live compositor parsing was performed.
+- Terminal extension: rendered/applied tmux, Neovim, Yazi and Git configs in a
+  disposable HOME, parsed Yazi TOML and Git true-color values, and verified a
+  shared accent override reaches those four tools plus Foot. Native tmux,
+  Neovim and Yazi executables were unavailable, so their runtime parsers and
+  interactive appearance remain target-system checks.
 - No Sway executable or Wayland seat was available for live compositor, locking,
   supervisor logout, or portal validation. Cross-distro package transactions
   remain unexecuted. The historical build-container notes below describe the
