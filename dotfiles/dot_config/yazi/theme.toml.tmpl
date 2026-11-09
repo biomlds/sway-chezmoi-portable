@@ -1,14 +1,27 @@
-# Uses the current Yazi manager UI schema; shared colors, no flavor downloads.
+# Yazi 26.9.1+ schema (the FAI build pin); no flavor downloads.
+[app]
+overall = { fg = "{{ .desktop.theme.foreground }}", bg = "{{ .desktop.theme.background }}" }
+
 [mgr]
 cwd = { fg = "{{ .desktop.theme.cyan }}" }
-hovered = { fg = "{{ .desktop.theme.background }}", bg = "{{ .desktop.theme.accent }}", bold = true }
-preview_hovered = { underline = true }
 find_keyword = { fg = "{{ .desktop.theme.pink }}", bold = true }
 find_position = { fg = "{{ .desktop.theme.accentAlt }}", italic = true }
 marker_copied = { fg = "{{ .desktop.theme.accentAlt }}", bg = "{{ .desktop.theme.accentAlt }}" }
 marker_cut = { fg = "{{ .desktop.theme.urgent }}", bg = "{{ .desktop.theme.urgent }}" }
 marker_selected = { fg = "{{ .desktop.theme.accent }}", bg = "{{ .desktop.theme.accent }}" }
 border_style = { fg = "{{ .desktop.theme.surface }}" }
+
+[indicator]
+parent = { fg = "{{ .desktop.theme.foreground }}", bg = "{{ .desktop.theme.surface }}" }
+current = { fg = "{{ .desktop.theme.background }}", bg = "{{ .desktop.theme.accent }}", bold = true }
+preview = { underline = true }
+padding = { open = " ", close = " " }
+
+[tabs]
+active = { fg = "{{ .desktop.theme.background }}", bg = "{{ .desktop.theme.accent }}", bold = true }
+inactive = { fg = "{{ .desktop.theme.muted }}", bg = "{{ .desktop.theme.backgroundAlt }}" }
+sep_inner = { open = "", close = "" }
+sep_outer = { open = "", close = "" }
 
 [mode]
 normal_main = { fg = "{{ .desktop.theme.background }}", bg = "{{ .desktop.theme.accent }}", bold = true }
@@ -20,6 +33,8 @@ unset_alt = { fg = "{{ .desktop.theme.urgent }}", bg = "{{ .desktop.theme.backgr
 
 [status]
 overall = { fg = "{{ .desktop.theme.foreground }}", bg = "{{ .desktop.theme.backgroundAlt }}" }
+sep_left = { open = "", close = "" }
+sep_right = { open = "", close = "" }
 perm_type = { fg = "{{ .desktop.theme.blue }}" }
 perm_read = { fg = "{{ .desktop.theme.accentAlt }}" }
 perm_write = { fg = "{{ .desktop.theme.accent }}" }
@@ -27,10 +42,11 @@ perm_exec = { fg = "{{ .desktop.theme.urgent }}" }
 
 [filetype]
 rules = [
-    { name = "*/", fg = "{{ .desktop.theme.blue }}", bold = true },
-    { mime = "image/*", fg = "{{ .desktop.theme.pink }}" },
-    { mime = "video/*", fg = "{{ .desktop.theme.pink }}" },
-    { mime = "audio/*", fg = "{{ .desktop.theme.cyan }}" },
-    { mime = "application/zip", fg = "{{ .desktop.theme.accent }}" },
-    { name = "*", fg = "{{ .desktop.theme.foreground }}" },
+    { url = "*/", fg = "{{ .desktop.theme.blue }}", bold = true },
+    { mime = "**/image/*", fg = "{{ .desktop.theme.pink }}" },
+    { mime = "**/video/*", fg = "{{ .desktop.theme.pink }}" },
+    { mime = "**/audio/*", fg = "{{ .desktop.theme.cyan }}" },
+    { mime = "**/application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*}", fg = "{{ .desktop.theme.accent }}" },
+    { url = "*", is = "exec", fg = "{{ .desktop.theme.accentAlt }}" },
+    { url = "*", fg = "{{ .desktop.theme.foreground }}" },
 ]

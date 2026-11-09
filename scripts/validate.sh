@@ -12,14 +12,14 @@ bad() { printf 'FAIL: %s\n' "$1" >&2; fail=1; }
 [ -f dotfiles/.chezmoidata.yaml ] && [ -d dotfiles/.chezmoitemplates ] && ok 'chezmoi data/templates present' || bad 'chezmoi data/templates'
 
 for f in packages/install.sh dotfiles/private_dot_local/bin/executable_*; do
-    case "$f" in *desktop-idle|*desktop-open-browser) continue ;; esac
+    case "$f" in *.tmpl) continue ;; esac
     sh -n "$f" || bad "shell syntax: $f"
     [ -x "$f" ] || bad "not executable: $f"
 done
 ok 'plain shell scripts parse and are executable'
 
 for f in dotfiles/private_dot_local/bin/*.tmpl dotfiles/run_*.tmpl; do
-    tmp=$(mktemp)
+    tmp=$tmpdir/rendered-shell
     sed '/^[[:space:]]*{{.*}}[[:space:]]*$/d; s/{{[^}]*}}/value/g' "$f" > "$tmp"
     sh -n "$tmp" || bad "templated shell syntax: $f"
     rm -f "$tmp"
@@ -83,8 +83,9 @@ for command in sway waybar wofi foot mako swaylock swayidle swaybg grim slurp wl
 done
 ok 'referenced desktop commands have package components'
 
-if command -v chezmoi >/dev/null 2>&1; then
-    printf 'note: chezmoi found; run the documented init/diff workflow in a disposable HOME for full rendering\n'
+python3 scripts/list-targets.py > "$tmpdir/targets.tsv"
+if command -v "${CHEZMOI:-chezmoi}" >/dev/null 2>&1; then
+    python3 scripts/test-render.py
 else
     printf 'skip: chezmoi binary not installed; source-state rendering requires a supported host\n'
 fi

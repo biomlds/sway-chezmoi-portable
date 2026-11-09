@@ -8,7 +8,8 @@ mkdir -p "$state/items"
 exec 8>"$state/store.lock"
 flock 8
 tmp=$(mktemp "$state/.clip.XXXXXX")
-trap 'rm -f "$tmp"' EXIT HUP INT TERM
+trap 'rm -f "$tmp"' EXIT
+trap 'exit 1' HUP INT TERM
 # Bound the read itself, not only the retained payload.
 dd bs=1048577 count=1 iflag=fullblock of="$tmp" 2>/dev/null
 size=$(wc -c < "$tmp" | tr -d ' ')

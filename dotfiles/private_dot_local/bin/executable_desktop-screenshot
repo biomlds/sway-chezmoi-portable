@@ -1,14 +1,20 @@
 #!/bin/sh
 set -eu
+umask 077
 mode=${1:-area}
 dir=${XDG_SCREENSHOTS_DIR:-$HOME/Pictures/Screenshots}
 mkdir -p "$dir"
-file=$dir/$(date +'%Y-%m-%d_%H-%M-%S').png
+file=$(mktemp "$dir/$(date +'%Y-%m-%d_%H-%M-%S').XXXXXX.png")
+complete=0
+cleanup() { [ "$complete" = 1 ] || rm -f "$file"; }
+trap cleanup EXIT
+trap 'exit 1' HUP INT TERM
 case "$mode" in
     full) grim "$file" ;;
     area) geometry=$(slurp) || exit 0; [ -n "$geometry" ] || exit 0; grim -g "$geometry" "$file" ;;
     *) printf 'Usage: %s full|area\n' "$0" >&2; exit 2 ;;
 esac
+complete=1
 wl-copy --type image/png < "$file"
 if command -v notify-send >/dev/null 2>&1; then notify-send 'Screenshot saved' "$file"; fi
 printf '%s\n' "$file"

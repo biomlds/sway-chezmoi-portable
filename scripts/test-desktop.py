@@ -34,6 +34,8 @@ class DesktopTests(unittest.TestCase):
             for name, body in (
                 ("mako", 'printf "started\\n" >> "$HOME/starts"; exec sleep 30'),
                 ("waybar", 'exit 17'),
+                ("nm-applet", 'exec sleep 30'),
+                ("blueman-applet", 'exec sleep 30'),
                 ("swaymsg", 'while [ ! -e "$HOME/disconnect" ]; do sleep 0.02; done'),
                 ("systemctl", "exit 0"), ("dbus-update-activation-environment", "exit 0"),
             ):
@@ -131,6 +133,29 @@ class DesktopTests(unittest.TestCase):
             result = subprocess.run(["sh", str(BIN / "executable_desktop-power-menu")], capture_output=True,
                 env={**os.environ, "HOME": str(home), "PATH": str(commands) + ":" + os.environ["PATH"]})
             self.assertNotIn(b"UNSAFE_SUSPEND", result.stdout)
+
+    def test_screenshots_are_private_unique_and_cancel_cleans_up(self):
+        with tempfile.TemporaryDirectory() as directory:
+            home = Path(directory)
+            commands = home / "commands"
+            commands.mkdir()
+            for name, body in (
+                ("grim", 'printf png > "$1"'),
+                ("wl-copy", 'cat >/dev/null'),
+                ("notify-send", 'exit 0'),
+                ("slurp", 'exit 1'),
+            ):
+                path = commands / name
+                path.write_text("#!/bin/sh\n" + body + "\n")
+                path.chmod(0o700)
+            env = {**os.environ, "HOME": directory, "PATH": str(commands) + ":" + os.environ["PATH"]}
+            script = ["sh", str(BIN / "executable_desktop-screenshot")]
+            paths = [subprocess.check_output(script + ["full"], env=env, text=True).strip() for _ in range(2)]
+            self.assertNotEqual(paths[0], paths[1])
+            for path in paths:
+                self.assertEqual(Path(path).stat().st_mode & 0o077, 0)
+            subprocess.run(script + ["area"], env=env, check=True)
+            self.assertEqual(len(list((home / "Pictures/Screenshots").iterdir())), 2)
 
 
 if __name__ == "__main__":

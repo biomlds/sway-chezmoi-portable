@@ -56,7 +56,9 @@ the Neovim init file is a complete minimal configuration, so merge deliberately
 if you already use a plugin setup. Neovim's colorscheme itself can also be reused
 with an existing init via `colorscheme workstation`. No plugins are downloaded.
 
-FAI already installs tmux/Neovim and builds Yazi. The portable optional package
+FAI already installs tmux/Neovim and builds Yazi 26.9.1. The Yazi theme targets
+26.9.1+ (`indicator` styles and URL-based file rules); older Yazi versions need
+their corresponding schema. The portable optional package
 tier includes tmux/Neovim; it does not fetch Yazi from a third-party source. Yazi
 configuration can remain dormant on machines where it is not installed.
 
@@ -64,6 +66,9 @@ Reload tmux with `tmux source-file ~/.tmux.conf`, reopen Neovim/Yazi, and open a
 Foot window. Git reads the XDG config automatically; existing `~/.gitconfig` has
 higher precedence. Color values are quoted because unquoted `#` starts a Git
 config comment. Identity/remotes/signing are not managed by this theme.
+tmux advertises RGB support specifically for Foot, not every terminal that calls
+itself `xterm-256color`. Other true-color terminals can use their own detected
+terminal features. Neovim's mode hook stops when another colorscheme is selected.
 
 Other ANSI-based tools (including htop's default terminal-color scheme, tree,
 grep/ripgrep and existing shell prompts) inherit Foot's coordinated ANSI palette.

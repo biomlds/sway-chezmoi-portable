@@ -1,6 +1,8 @@
 #!/bin/sh
 set -eu
-lock=$HOME/.local/bin/desktop-lock
+# swayidle executes command strings through a shell. Expand HOME in that shell,
+# not into an unquoted command path (home directories may contain spaces).
+lock='"$HOME/.local/bin/desktop-lock"'
 exec swayidle -w \
   timeout {{ .desktop.idle.lockSeconds }} "$lock" \
   timeout {{ .desktop.idle.displaySeconds }} 'swaymsg "output * power off"' \

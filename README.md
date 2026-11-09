@@ -22,13 +22,14 @@ consistently.
 │   ├── .chezmoidata.yaml        # shared desktop/theme data
 │   ├── .chezmoiignore
 │   ├── .chezmoitemplates/       # reusable Sway palette template
-│   ├── run_once_before_*        # creates state/cache/screenshot directories
+│   ├── run_once_before_*        # creates private screenshot/host directories
 │   ├── run_onchange_before_*    # optional package hook (disabled by default)
 │   ├── run_after_*              # validates/refreshes an active session
 │   ├── dot_config/
 │   │   ├── sway/config.d/       # variables, distro, input, output, appearance,
 │   │   │                        # workspaces, bindings, rules, autostart
 │   │   ├── waybar/  wofi/  mako/  foot/
+│   │   ├── nvim/  yazi/  git/   # coordinated terminal tools
 │   │   ├── gtk-3.0/ gtk-4.0/ qt5ct/ qt6ct/
 │   │   ├── environment.d/       # Wayland/XDG application environment
 │   │   └── xdg-desktop-portal/
@@ -99,7 +100,11 @@ chezmoi --source "$PWD" apply --verbose
 ~/.local/bin/desktop-sway-session
 ```
 
-A display manager's packaged Sway session can also be selected. `~/.config/environment.d/10-sway.conf` supplies the same application environment through the user manager.
+A display manager's packaged Sway session can also be selected, but session
+environment inheritance depends on its integration. Prefer the wrapper when
+starting from a TTY, and **Workstation Sway** on FAI. The environment.d file
+configures user-manager applications; it does not retroactively export variables
+into an already running compositor.
 
 Package tiers are cumulative. Use `--tier required` for the minimum, `--tier recommended` for the intended experience, or `--tier optional` for all mapped extras. The chezmoi package hook is deliberately disabled by default so package installation remains explicit. To opt in, set `data.packages.install = true` and the desired tier in the user's chezmoi config.
 
@@ -135,11 +140,14 @@ The component-to-package source of truth is `packages/components.tsv`. The insta
 
 ### Recommended
 
-`policykit-1-gnome` / `polkit-gnome`, `network-manager-gnome` / `network-manager-applet`, `brightnessctl`, `power-profiles-daemon`, `pavucontrol`, `xdg-user-dirs`, `papirus-icon-theme`, and `gnome-themes-extra`.
+`policykit-1-gnome` / `polkit-gnome`, `network-manager-gnome` / `network-manager-applet`, `brightnessctl`, `power-profiles-daemon`, `pavucontrol`, `xdg-user-dirs`, `papirus-icon-theme`, `gnome-themes-extra`, and Qt5/Qt6 Wayland platform plugins.
 
 ### Optional
 
 `playerctl`, `blueman`, desktop notification CLI (`libnotify-bin` on apt, `libnotify` on Fedora), plus `qt5ct` and `qt6ct` on Debian/Fedora. Ubuntu 24.04 does not provide qt5ct/qt6ct in its standard package index, so those two cells are intentionally `-`; Qt still uses Wayland and the XDG portal, but qt5ct/qt6ct-specific styling requires a later Ubuntu release or a user-chosen, separately trusted source.
+
+The optional tier also includes tmux and Neovim. Yazi themes target **26.9.1+**,
+matching FAI's build pin; Yazi itself is not downloaded by this project.
 
 At real install time, `apt-cache show` or `dnf list --available` re-verifies every selected package before any install transaction. The script never adds repositories.
 
@@ -174,12 +182,15 @@ Run:
 ```sh
 ./scripts/validate.sh
 ./scripts/list-targets.py
+# Also render/apply in a disposable HOME when chezmoi is available:
+CHEZMOI=/path/to/chezmoi ./scripts/validate.sh
 ```
 
 Validation covers shell syntax, executable modes, strict Waybar JSON, template/CSS
 balance, PNG signature, package shape/resolution, helper coverage, target paths,
 and behavioral regression tests. Follow-up validation ran actual chezmoi init and
-apply twice in a disposable HOME. Sway parsing, package transactions, screen
+apply twice in a disposable HOME; this is now a repeatable test in
+`scripts/test-render.py`. Native Neovim startup/theme checks also passed. Sway parsing, package transactions, screen
 locking, portals and hardware behavior still require target-system checks. See
 `docs/validation.md` for the exact boundary.
 

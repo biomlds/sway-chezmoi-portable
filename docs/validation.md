@@ -1,5 +1,24 @@
 # Validation record
 
+## Latest polish pass
+
+- `CHEZMOI=/path/to/chezmoi scripts/validate.sh` now runs the disposable-home
+  rendering checks automatically, including a home path containing spaces,
+  repeated apply, Git colors, Yazi TOML/schema contracts and palette overrides.
+- Six behavioral tests pass, including private unique screenshots and cancellation
+  cleanup as well as clipboard, bindings, suspend and daemon lifecycle checks.
+- Native Neovim 0.11.5 headless startup, the rendered highlight color, and removal
+  of the mode hook when switching colorschemes passed using a temporary tool
+  installation outside the repositories.
+- Corrected Yazi keys against upstream **v26.9.1**: hover styles are under
+  `[indicator]`, filename rules use `url`, and MIME patterns match the current
+  schema. Separator defaults avoid requiring Powerline glyphs.
+- FAI configuration-contract tests and its manifest check pass. This pass did not
+  change FAI sources or apply configuration to the real user home.
+- Native tmux/Yazi/Foot/Sway/Waybar parsers and a live Wayland session remain
+  unavailable. Package transactions and hardware/portal/lock acceptance still
+  require the target workstation. Earlier entries below are historical results.
+
 ## Workstation integration follow-up
 
 - Portable static validator and target-path audit pass.

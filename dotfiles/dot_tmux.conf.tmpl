@@ -2,7 +2,7 @@
 set -g mouse on
 set -g history-limit 100000
 set -g default-terminal 'tmux-256color'
-set -as terminal-features ',foot*:RGB,xterm-256color:RGB'
+set -as terminal-features ',foot*:RGB'
 set -g status-style 'bg={{ .desktop.theme.background }},fg={{ .desktop.theme.foreground }}'
 set -g status-left '#[fg={{ .desktop.theme.background }},bg={{ .desktop.theme.accent }},bold] #S #[default] '
 set -g status-right '#[fg={{ .desktop.theme.muted }}]%a %d %b #[fg={{ .desktop.theme.accent }}]%H:%M '

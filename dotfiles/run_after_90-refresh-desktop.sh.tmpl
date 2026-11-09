@@ -1,9 +1,9 @@
 #!/bin/sh
 set -eu
 # Every apply may change config or helpers, not only three palette fields.
-if command -v makoctl >/dev/null 2>&1; then makoctl reload >/dev/null 2>&1 || true; fi
-if command -v swaymsg >/dev/null 2>&1 && [ -n "${SWAYSOCK:-}" ]; then
+if command -v sway >/dev/null 2>&1 && command -v swaymsg >/dev/null 2>&1 && [ -n "${SWAYSOCK:-}" ]; then
     sway --validate --config "$HOME/.config/sway/config"
     swaymsg reload
     "$HOME/.local/bin/desktop-restart-waybar" >/dev/null 2>&1 || true
 fi
+if command -v makoctl >/dev/null 2>&1 && [ -n "${SWAYSOCK:-}" ]; then makoctl reload >/dev/null 2>&1 || true; fi

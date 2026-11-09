@@ -43,6 +43,13 @@ local function mode_color()
     hi("WorkstationMode", {fg=p.bg, bg=color, bold=true})
 end
 local group = vim.api.nvim_create_augroup("WorkstationTheme", {clear=true})
-vim.api.nvim_create_autocmd("ModeChanged", {group=group, callback=mode_color})
+vim.api.nvim_create_autocmd("ModeChanged", {group=group, callback=function()
+    -- Clear this scheme's mode hook if another colorscheme has replaced it.
+    if vim.g.colors_name ~= "workstation" then
+        vim.api.nvim_clear_autocmds({group=group})
+        return
+    end
+    mode_color()
+end})
 mode_color()
 vim.opt.statusline = "%#WorkstationMode# %{mode()} %* %f %m%r%=%y %l:%c %p%% "
