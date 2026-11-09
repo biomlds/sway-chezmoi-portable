@@ -1,0 +1,15 @@
+font pango:{{ .desktop.fontSans }} {{ .desktop.fontSize }}
+default_border pixel 2
+default_floating_border normal 2
+hide_edge_borders smart
+gaps inner 8
+gaps outer 4
+smart_gaps on
+focus_follows_mouse no
+mouse_warping container
+
+client.focused          $accent     $accent     $bg        $accent     $accent
+client.focused_inactive $surface    $surface    $fg        $surface    $surface
+client.unfocused        $bg_alt     $bg_alt     $muted     $bg_alt     $bg_alt
+client.urgent           $urgent     $urgent     $bg        $urgent     $urgent
+client.placeholder      $surface    $surface    $fg        $surface    $surface

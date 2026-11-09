@@ -1,0 +1,9 @@
+show=drun
+location=center
+width=45%
+height=55%
+allow_images=true
+insensitive=true
+term=foot
+prompt=Run
+hide_scroll=true

@@ -1,0 +1,11 @@
+#!/bin/sh
+set -eu
+: "${XDG_RUNTIME_DIR:?Clipboard history requires a private login runtime directory}"
+state=$XDG_RUNTIME_DIR/sway-desktop/clipboard
+index=$state/index.tsv
+[ -s "$index" ] || exit 0
+choice=$(tac "$index" | awk -F '\t' '{print $2 " [" $1 "]"}' | wofi --dmenu --prompt 'Clipboard') || exit 0
+hash=${choice##*[}; hash=${hash%]}
+case "$hash" in *[!0-9a-f]*|'') exit 1 ;; esac
+[ -r "$state/items/$hash" ] || exit 1
+wl-copy < "$state/items/$hash"

@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+choice=$(printf '%s\n' 'Lock' 'Logout' 'Suspend' 'Reboot' 'Power off' | wofi --dmenu --prompt 'Session') || exit 0
+case "$choice" in
+    Lock) exec "$HOME/.local/bin/desktop-lock" ;;
+    Logout) exec swaymsg exit ;;
+    Suspend) "$HOME/.local/bin/desktop-lock" && exec systemctl suspend ;;
+    Reboot) exec systemctl reboot ;;
+    'Power off') exec systemctl poweroff ;;
+esac

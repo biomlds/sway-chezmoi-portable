@@ -1,0 +1,35 @@
+component	tier	debian	ubuntu	fedora	notes
+sway	required	sway	sway	sway	Wayland compositor
+status-bar	required	waybar	waybar	waybar	Shared bar configuration
+launcher	required	wofi	wofi	wofi	Wayland-native launcher available in all supported standard repositories
+notifications	required	mako-notifier	mako-notifier	mako	Package name differs on Fedora
+terminal	required	foot	foot	foot	Wayland-native terminal
+lock	required	swaylock	swaylock	swaylock	Portable upstream lock screen
+idle	required	swayidle	swayidle	swayidle	Idle and sleep integration
+wallpaper	required	swaybg	swaybg	swaybg	Sway output background helper
+screenshot-full	required	grim	grim	grim	Wayland screenshots
+screenshot-region	required	slurp	slurp	slurp	Region selection
+clipboard	required	wl-clipboard	wl-clipboard	wl-clipboard	Wayland clipboard commands
+runtime-locks	required	util-linux	util-linux	util-linux	flock singleton and clipboard serialization
+qt5-wayland	recommended	qtwayland5	qtwayland5	qt5-qtwayland	Qt5 Wayland platform plugin for KeePassXC
+qt6-wayland	recommended	qt6-wayland	qt6-wayland	qt6-qtwayland	Qt6 Wayland platform plugin
+audio-session	required	wireplumber	wireplumber	wireplumber	Provides wpctl controls
+audio-pulse-compat	required	pipewire-pulse	pipewire-pulse	pipewire-pulseaudio	Waybar audio compatibility
+xdg-utils	required	xdg-utils	xdg-utils	xdg-utils	Default application opening
+portal-wlr	required	xdg-desktop-portal-wlr	xdg-desktop-portal-wlr	xdg-desktop-portal-wlr	Wayland screen sharing portal
+portal-gtk	required	xdg-desktop-portal-gtk	xdg-desktop-portal-gtk	xdg-desktop-portal-gtk	File chooser and GTK portal fallback
+font-sans	required	fonts-dejavu-core	fonts-dejavu-core	dejavu-sans-fonts	Portable UI font
+font-mono	required	fonts-dejavu-core	fonts-dejavu-core	dejavu-sans-mono-fonts	Portable terminal font
+polkit-agent	recommended	policykit-1-gnome	policykit-1-gnome	polkit-gnome	Graphical authentication agent
+network-applet	recommended	network-manager-gnome	network-manager-gnome	network-manager-applet	Tray network control
+brightness	recommended	brightnessctl	brightnessctl	brightnessctl	Laptop brightness keys; harmless on desktops
+power-profiles	recommended	power-profiles-daemon	power-profiles-daemon	power-profiles-daemon	Laptop power profile module
+audio-control	recommended	pavucontrol	pavucontrol	pavucontrol	Graphical PipeWire/Pulse control
+user-dirs	recommended	xdg-user-dirs	xdg-user-dirs	xdg-user-dirs	Standard user folders
+icons	recommended	papirus-icon-theme	papirus-icon-theme	papirus-icon-theme	Consistent GTK and launcher icons
+gtk-theme	recommended	gnome-themes-extra	gnome-themes-extra	gnome-themes-extra	Adwaita dark assets
+media-keys	optional	playerctl	playerctl	playerctl	MPRIS media key support
+bluetooth	optional	blueman	blueman	blueman	Bluetooth tray applet
+qt5-style	optional	qt5ct	-	qt5ct	Ubuntu 24.04 lacks qt5ct in standard repositories
+qt6-style	optional	qt6ct	-	qt6ct	Ubuntu 24.04 lacks qt6ct in standard repositories
+desktop-notify	optional	libnotify-bin	libnotify-bin	libnotify	Screenshot completion notifications

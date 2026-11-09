@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+command -v playerctl >/dev/null 2>&1 || exit 0
+case "${1:-}" in play-pause|next|previous|stop) exec playerctl "$1" ;; *) exit 2 ;; esac

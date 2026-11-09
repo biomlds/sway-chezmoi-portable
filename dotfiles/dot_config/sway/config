@@ -1,0 +1,6 @@
+# Managed by chezmoi. Keep local hardware changes in hosts/*.conf.
+include ~/.config/sway/config.d/*.conf
+# Preserve distribution session environment/portal hooks and workstation extras.
+# No bar is declared here: desktop-session-start owns the single Waybar instance.
+include /etc/sway/config.d/*.conf
+include ~/.config/sway/hosts/*.conf

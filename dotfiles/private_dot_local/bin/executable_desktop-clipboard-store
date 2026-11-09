@@ -1,0 +1,29 @@
+#!/bin/sh
+set -eu
+case ${CLIPBOARD_STATE:-data} in sensitive|nil|clear) exit 0 ;; esac
+: "${XDG_RUNTIME_DIR:?Clipboard history requires a private login runtime directory}"
+umask 077
+state=$XDG_RUNTIME_DIR/sway-desktop/clipboard
+mkdir -p "$state/items"
+exec 8>"$state/store.lock"
+flock 8
+tmp=$(mktemp "$state/.clip.XXXXXX")
+trap 'rm -f "$tmp"' EXIT HUP INT TERM
+# Bound the read itself, not only the retained payload.
+dd bs=1048577 count=1 iflag=fullblock of="$tmp" 2>/dev/null
+size=$(wc -c < "$tmp" | tr -d ' ')
+[ "$size" -gt 0 ] && [ "$size" -le 1048576 ] || exit 0
+hash=$(sha256sum "$tmp" | awk '{print $1}')
+item=$state/items/$hash
+[ -e "$item" ] || mv "$tmp" "$item"
+summary=$(tr '\n\t' '  ' < "$item" | sed 's/[[:space:]][[:space:]]*/ /g' | cut -c1-120)
+index=$state/index.tsv
+new=$state/index.new
+{ [ -r "$index" ] && awk -F '\t' -v h="$hash" '$1 != h' "$index" || true; printf '%s\t%s\n' "$hash" "$summary"; } | tail -n 200 > "$new"
+mv "$new" "$index"
+# The index limit also bounds payload storage; remove evicted content.
+for old in "$state/items/"*; do
+    [ -f "$old" ] || continue
+    old_hash=${old##*/}
+    awk -F '\t' -v h="$old_hash" '$1 == h {found=1} END {exit !found}' "$index" || rm -f "$old"
+done

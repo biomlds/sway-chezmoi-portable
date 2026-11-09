@@ -1,0 +1,15 @@
+#!/bin/sh
+set -eu
+# Changing package tier or this source file changes the rendered script hash.
+# distro={{ .chezmoi.osRelease.id }} tier={{ .packages.tier }} install={{ .packages.install }}
+{{ if .packages.install -}}
+source_dir={{ .chezmoi.sourceDir | quote }}
+installer=
+for candidate in "$source_dir/../packages/install.sh" "$source_dir/packages/install.sh"; do
+    if [ -x "$candidate" ]; then installer=$candidate; break; fi
+done
+[ -n "$installer" ] || { printf 'Package installer not found beside chezmoi source: %s\n' "$source_dir" >&2; exit 1; }
+exec "$installer" --tier {{ .packages.tier | quote }}
+{{ else -}}
+printf '%s\n' 'Package installation is disabled in chezmoi data; run packages/install.sh explicitly.'
+{{ end -}}

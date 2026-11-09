@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+: "${XDG_RUNTIME_DIR:?Clipboard history requires a private login runtime directory}"
+umask 077
+state=$XDG_RUNTIME_DIR/sway-desktop/clipboard
+mkdir -p "$state/items"
+exec 9>"$state/watcher.lock"
+flock -n 9 || exit 0
+exec wl-paste --type text --watch "$HOME/.local/bin/desktop-clipboard-store"

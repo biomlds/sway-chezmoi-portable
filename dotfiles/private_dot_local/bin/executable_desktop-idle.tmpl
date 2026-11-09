@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+lock=$HOME/.local/bin/desktop-lock
+exec swayidle -w \
+  timeout {{ .desktop.idle.lockSeconds }} "$lock" \
+  timeout {{ .desktop.idle.displaySeconds }} 'swaymsg "output * power off"' \
+  resume 'swaymsg "output * power on"' \
+  before-sleep "$lock" \
+  lock "$lock"

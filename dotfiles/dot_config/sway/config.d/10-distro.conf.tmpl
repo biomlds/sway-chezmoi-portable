@@ -1,0 +1,11 @@
+# Distro-specific behavior is intentionally isolated here. The visible desktop
+# is shared; currently only the package layer and polkit path differ.
+{{- if eq .chezmoi.osRelease.id "debian" }}
+set $distribution debian
+{{- else if eq .chezmoi.osRelease.id "ubuntu" }}
+set $distribution ubuntu
+{{- else if eq .chezmoi.osRelease.id "fedora" }}
+set $distribution fedora
+{{- else }}
+set $distribution unsupported
+{{- end }}

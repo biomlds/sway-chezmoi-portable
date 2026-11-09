@@ -1,0 +1,26 @@
+desktop:
+  keyboardLayout: us
+  browserStartUrl: https://start.duckduckgo.com/
+  fontSans: DejaVu Sans
+  fontMono: DejaVu Sans Mono
+  fontSize: 10
+  gtkTheme: Adwaita-dark
+  iconTheme: Papirus-Dark
+  cursorTheme: Adwaita
+  clipboard:
+    history: false
+  idle:
+    lockSeconds: 300
+    displaySeconds: 600
+  theme:
+    background: "#111318"
+    backgroundAlt: "#1a1d24"
+    surface: "#242832"
+    foreground: "#e6e9ef"
+    muted: "#9298a6"
+    accent: "#79c7c5"
+    accentAlt: "#e6a76f"
+    urgent: "#e06c75"
+packages:
+  install: false
+  tier: recommended

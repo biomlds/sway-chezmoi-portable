@@ -1,0 +1,5 @@
+# Source-only documentation, if added later.
+README.md
+{{ if ne .chezmoi.os "linux" }}
+*
+{{ end }}

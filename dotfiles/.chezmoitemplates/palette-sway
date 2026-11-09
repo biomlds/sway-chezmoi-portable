@@ -1,0 +1,8 @@
+set $bg {{ .desktop.theme.background }}
+set $bg_alt {{ .desktop.theme.backgroundAlt }}
+set $surface {{ .desktop.theme.surface }}
+set $fg {{ .desktop.theme.foreground }}
+set $muted {{ .desktop.theme.muted }}
+set $accent {{ .desktop.theme.accent }}
+set $accent_alt {{ .desktop.theme.accentAlt }}
+set $urgent {{ .desktop.theme.urgent }}

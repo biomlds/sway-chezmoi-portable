@@ -1,0 +1,17 @@
+#!/bin/sh
+set -eu
+command -v waybar >/dev/null 2>&1 || exit 0
+: "${XDG_RUNTIME_DIR:?A login session with XDG_RUNTIME_DIR is required}"
+: "${SWAYSOCK:?Run this helper inside Sway}"
+umask 077
+runtime=$XDG_RUNTIME_DIR/sway-desktop
+mkdir -p "$runtime"
+pidfile=$runtime/waybar.pid
+if [ -r "$runtime/session" ] && [ "$(cat "$runtime/session")" = "$SWAYSOCK" ] && [ -r "$pidfile" ]; then
+    pid=$(cat "$pidfile")
+    # Waybar handles SIGUSR2 by reloading configuration in the owned process.
+    # Keep ownership with the session supervisor so logout can reap it.
+    exec kill -USR2 "$pid"
+fi
+printf '%s\n' 'No managed Waybar in this Sway session; log out/in to restart daemons.' >&2
+exit 1
