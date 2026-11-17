@@ -1,8 +1,14 @@
 #!/bin/sh
 set -eu
+# Debian/Ubuntu: lxpolkit (installs /usr/bin/lxpolkit). Fedora and other
+# distributions: polkit-gnome paths kept as fallbacks.
+if command -v lxpolkit >/dev/null 2>&1; then
+    exec lxpolkit
+fi
 for agent in \
   /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 \
   /usr/libexec/polkit-gnome-authentication-agent-1; do
     [ -x "$agent" ] && exec "$agent"
 done
+printf '%s\n' 'No Polkit authentication agent found; install lxpolkit.' >&2
 exit 0

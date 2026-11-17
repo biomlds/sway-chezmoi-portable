@@ -20,7 +20,7 @@ portal-wlr	required	xdg-desktop-portal-wlr	xdg-desktop-portal-wlr	xdg-desktop-po
 portal-gtk	required	xdg-desktop-portal-gtk	xdg-desktop-portal-gtk	xdg-desktop-portal-gtk	File chooser and GTK portal fallback
 font-sans	required	fonts-dejavu-core	fonts-dejavu-core	dejavu-sans-fonts	Portable UI font
 font-mono	required	fonts-dejavu-core	fonts-dejavu-core	dejavu-sans-mono-fonts	Portable terminal font
-polkit-agent	recommended	policykit-1-gnome	policykit-1-gnome	polkit-gnome	Graphical authentication agent
+polkit-agent	recommended	lxpolkit	lxpolkit	polkit-gnome	Graphical authentication agent
 network-applet	recommended	network-manager-gnome	network-manager-gnome	network-manager-applet	Tray network control
 brightness	recommended	brightnessctl	brightnessctl	brightnessctl	Laptop brightness keys; harmless on desktops
 power-profiles	recommended	power-profiles-daemon	power-profiles-daemon	power-profiles-daemon	Laptop power profile module
